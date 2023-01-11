@@ -6,19 +6,17 @@ import {
 } from '@nestjs/websockets';
 import { Server } from 'ws';
 
-@WebSocketGateway(8080)
-export class EventsGateway {
+@WebSocketGateway(8081)
+export class MyGateway {
   database = {
-    sell: [
+    chart: [
       {
-        unit_price: 2060,
-        orderQuantity: 178,
+        start: 2300,
+        end: 2000,
       },
-    ],
-    buy: [
       {
-        unit_price: 10,
-        orderQuantity: 1,
+        start: 2200,
+        end: 2000,
       },
     ],
   };
@@ -33,7 +31,6 @@ export class EventsGateway {
   @SubscribeMessage('publish')
   publish(me: any, data: any) {
     data = JSON.parse(data);
-    this.database.buy.push(data.data);
     for (const client of this.server.clients) {
       client.send(
         JSON.stringify({
